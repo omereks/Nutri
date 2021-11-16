@@ -1,0 +1,23 @@
+{
+  "name": "Nutri",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "startfront": "cd nutri && npm start",
+    "startback": "cd server && npm start",
+    "start": "npm run startfront | npm run startback"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omereks/Nutri.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/omereks/Nutri/issues"
+  },
+  "homepage": "https://github.com/omereks/Nutri#readme"
+}
