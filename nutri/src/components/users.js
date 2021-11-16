@@ -1,15 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-xsx
-      </header>
-    </div>
-  );
+
+class Users extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            
+        }
+    }
+
+    render() {
+        return (
+            <div >
+                users
+            </div>
+          );
+    }
 }
-
-export default App;
+export default Users;
