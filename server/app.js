@@ -1,18 +1,24 @@
-var mysql = require('mysql')
+var mysql = require('mysql2')
 var cors =  require('cors')
 var express = require('express');
 var app = express();
 app.use(express.json())
 app.use(cors())
 
+var db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+  insecureAuth : false,
+})
 
-// var db = mysql.createConnection({
-//   host: 'localhost',
-//   user: 'root',
-//   password: 'root',
-// })
-// db.connect()
+db.connect()
 
+// q = "SELECT * FROM nurti.nutrient;"
+// db.query(q, function (err, result, fields) {
+//   if (err) throw err;
+//   console.log(result);
+// });
 
 
 app.post("/api/addUser", (req,res) => {
@@ -26,20 +32,23 @@ app.post("/api/addUser", (req,res) => {
 
 app.get("/api/isuser", (req,res) => {
   const id = req.query.id;
+  var resultQ = 3;
+  const query = "SELECT COUNT(id) AS c FROM nurti.users WHERE id="+id+";"
+  db.query(query, function (err, result, fields) {
+    resultQ = result[0].c;
+    console.log(resultQ)
+    if(resultQ==1)
+      res.send(true);
+    if(resultQ==0)
+      res.send(false);
+  });
+  
 
-  const query = "SELECT COUNT("+id+") FROM table WHERE id = "+id+";"
-  // TODO: mysql query
-
-  console.log(query)
-  if(id==1)
-    res.send(true);
-  if(id==2)
-    res.send(false);
+  // db.end();
 })
 
 
 
 
-// db.end()
 
 module.exports = app;
