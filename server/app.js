@@ -31,10 +31,12 @@ app.post("/api/addUser", (req,res) => {
 })
 
 app.get("/api/isuser", (req,res) => {
+  // console.log(req)
   const id = req.query.id;
   var resultQ = 3;
   const query = "SELECT COUNT(id) AS c FROM nurti.users WHERE id="+id+";"
   db.query(query, function (err, result, fields) {
+    console.log(result);
     resultQ = result[0].c;
     console.log(resultQ)
     if(resultQ==1)

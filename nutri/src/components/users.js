@@ -38,6 +38,7 @@ class Users extends React.Component{
                                 console.log(this.state.newUser)
                                 Axios.get("http://localhost:3001/api/isuser", {params: {id:this.state.userID}})
                                 .then((val)=> {
+                                    console.log(val)
                                     if(val.data){
                                         this.setState({newUser: false})
                                         this.props.chengeUserId(this.state.userID)
@@ -57,7 +58,7 @@ class Users extends React.Component{
                             New User :) please select a gender:
                             <Button data-bs-toggle="modal" data-bs-target="#exampleModal"  onClick={(e)=>{
                             console.log(this.state.newUser)
-                            Axios.post("http://localhost:3001/api/XXXXX", {params: {id:this.state.userID}})
+                            Axios.post("http://localhost:3001/api/adduser", {params: {id:this.state.userID, gender:1}})
                             .then((val)=> {
                             
                             })
