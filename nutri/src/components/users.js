@@ -59,19 +59,13 @@ class Users extends React.Component{
                             <Button data-bs-toggle="modal" data-bs-target="#exampleModal"  onClick={(e)=>{
                             console.log(this.state.newUser)
                             Axios.post("http://localhost:3001/api/adduser", {params: {id:this.state.userID, gender:1}})
-                            .then((val)=> {
-                            
-                            })
                             this.setState({newUser: false})
                             }}>
                                 Male
                             </Button>
                             <span>  </span>
                             <Button data-bs-toggle="modal" data-bs-target="#exampleModal"  onClick={(e)=>{
-                            Axios.post("http://localhost:3001/api/XXXXX", {params: {id:this.state.userID}})
-                            .then((val)=> {
-                            
-                            })
+                            Axios.post("http://localhost:3001/api/adduser", {params: {id:this.state.userID, gender:0}})
                             this.setState({newUser: false})
                             }}>
                                 Female
