@@ -195,11 +195,10 @@ print("finish create users")
 #users
 print("create recommended_values_per_users table")
 mycursor.execute("CREATE TABLE `nurti`.`recommended_values_per_users` (" \
-                    "`id` INT NOT NULL," \
+                    "`id` INT NOT NULL AUTO_INCREMENT," \
                     "`user_id` INT NULL," \
                     "`nutrient_id` INT NULL," \
                     "`amount` INT NULL," \
-                    "`recommended_values_per_userscol` INT NULL," \
                     "PRIMARY KEY (`id`));")
 db.commit()
 print("finish create recommended_values_per_users")
