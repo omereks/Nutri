@@ -1,9 +1,9 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
-import Users from './components/Users'
-import Search from './components/Search'
+import Users from './components/users'
+import Search from './components/search'
 import Graph from './components/Graph'
-
+import SearchBox from './components/SearchBox';
 function App() {
 
   const [UserId, setUserId] = React.useState(0);
@@ -22,6 +22,7 @@ function App() {
           
           <div className="search">
             <Search/>
+           <div className="App-Component"> <SearchBox userId={UserId}/></div>
           </div>
 
           <div className="graph">
