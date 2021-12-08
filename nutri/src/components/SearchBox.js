@@ -59,11 +59,10 @@ export default class SearchBox extends React.Component{
 addFood = (v) =>{
     // check the user have input
     if(this.state.text == 0){
-        console.log("empty string")
+        window.alert("empty string")
         return
     }
     // check if it exists so we change the count
-    console.log(this.props.userId)
     const inputName = this.state.text
     var existsValue = this.foods.filter(c => c.foodsname == inputName) // return the value if exists otherwise return empty list
     if (existsValue.length != 0) { // if the value is already exists we upload it
@@ -78,8 +77,8 @@ addFood = (v) =>{
         
     }else{ // if we here that means that is a new name which can be false name (not in db) so we check if its in the db and after that we enter to the db (the server doing both in one request)
     axios.post("http://localhost:3001/api/addFood",{params: {foodId:this.count.counter,foodValue:inputName,foodAmount:1,userId:this.props.userId}}).then((succes) => {
-        if(succes == "false"){
-            console.log("not in database, try diffrent name convention")
+        if(succes.data == false){
+            window.alert("not in database, try diffrent name convention")
         }else{
             this.foods.push({foodId: this.count.counter,foodsname: this.state.text,foodAmount:1})
             this.count.counter = this.count.counter + 1
@@ -137,9 +136,9 @@ removeFood = (v)=>{
        const { text} = this.state;
         return (
             <div className="SearchBox">
+                <button onClick={this.addFood}>Add!</button>
                 <input value={text} onChange={this.onTextChanged} type="text" />
                 {this.renderSuggestions()}
-                <button onClick={this.addFood}>Add!</button>
                 {this.foods.map(f => <UserFood  key={f.foodId} id={f.foodId} valueName={f.foodsname} foodAmount={f.foodAmount} removeFunction={this.removeFood}></UserFood>)}
             </div>
             

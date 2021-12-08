@@ -64,9 +64,7 @@ app.get("/api/foodexist", (req,res) =>{
   const prefix = req.query.foodname
   //const prefix = "\""+req.query.foodname+"%"+"\"" //req.query.foodname
   //const valuer = '+'+req.query.foodname+'+'+'%'
-  console.log(prefix)
   const prefixquery = "SELECT description FROM food WHERE description LIKE '"+prefix+"%'"+" LIMIT 5;"
-  console.log(prefixquery)
   db.query(prefixquery,function(err,result,fields){
     if (err){
       console.log(err)
@@ -102,7 +100,6 @@ app.post("/api/addFood", (req,res) =>{
           res.send("false")
         }else{
           foodEatenObject = "hi"//{id:req.body.params.foodId,user_id:"anonymous",food_id=result,amount:req.body.params.foodAmount}
-          console.log(result[0].food_id)
           food_id = result[0].food_id
           const insertQuery = "INSERT INTO nurti.food_eaten (id,user_id,food_id,amount) VALUES ("+req.body.params.foodId+","+req.body.params.userId+","+food_id+","+req.body.params.foodAmount+")"
           console.log(insertQuery) // for test
@@ -152,7 +149,6 @@ app.post("/api/deleteFood",(req,res) =>{
     if(err){
       console.log(err)
     }else{
-      console.log(result)
       food_id = result[0].food_id // the food id
       const deleteQuery = "DELETE FROM food_eaten WHERE food_id="+food_id+";"
       console.log(deleteQuery)
