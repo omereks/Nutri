@@ -3,7 +3,7 @@ import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Refe
 
 const data = [
     {
-        name: 'Carbohydrates',
+        name: 'Carbon',
         Recommended: 75,
         Recommended4U: 75
     },
@@ -27,11 +27,11 @@ const data = [
         Recommended: 45,
         Recommended4U: 45
     },
-    // {
-    //     name: 'Dietary fibre',
-    //     Recommended: 27,
-    //     Recommended4U: 126
-    // },
+    {
+        name: 'Dietary fibre',
+        Recommended: 27,
+        Recommended4U: 126
+    },
 ]
 class Graph extends React.Component{
     constructor(props) {
@@ -51,12 +51,13 @@ class Graph extends React.Component{
                     <YAxis tick={{fontSize:15, fill:'white'}}/>
                     <Tooltip />
                     <Legend verticalAlign="top" iconSize={14} />
-                    <Bar dataKey="Recommended" legendType={"line"} label={{ fill: 'blue', fontSize: 15 }} fill="#8884d8" />
-                    <Bar dataKey="Recommended4U" legendType={"line"} label={{ fill: 'green', fontSize: 15 }} fill="#82ca9d" />
+
+                    <Bar dataKey="Recommended4U" name='Daily nutrient in %' legendType={"line"} label={{ fill: 'green', fontSize: 15 }} fill="#82ca9d" />
                     <ReferenceLine strokeWidth={3} y={100} alwaysShow={true} isFront={true} label={{value:'Your Goal For Today', fill: 'white', fontSize: 20 }}  stroke="red" strokeDasharray="3 3" />
                 </BarChart>
             </ResponsiveContainer>
         );
+        // <Bar dataKey="Recommended" legendType={"line"} label={{ fill: 'blue', fontSize: 15 }} fill="#8884d8" />
     }
 }
 export default Graph;
