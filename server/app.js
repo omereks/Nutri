@@ -9,7 +9,7 @@ app.use(cors())
 var db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'Mako1234',
+  password: 'root',
   insecureAuth : false,
 })
 
