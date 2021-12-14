@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ReferenceLine, ResponsiveContainer } from 'recharts';
+import axios from "axios";
+import {Button} from "reactstrap";
 
 const data = [
     {
@@ -41,9 +43,32 @@ class Graph extends React.Component{
             recommenedValues: {},
             userEatenValues: {},
         }
+        //this.updateGraph = this.updateGraph.bind(this);
     }
+
+
+    async getData() {
+        await axios.get("http://localhost:3001/api/nutrients", {params: {user_id:5555}}).then((res)=>{
+            this.setState({
+                data: res.data
+
+            });
+            console.log(res.data)
+        })
+    };
+
+    async componentDidMount() {
+
+    }
+    async componentWillReceiveProps(nextProps) {
+        this.getData().then(()=>{
+            this.setState()
+        })
+    }
+
     render() {
         return (
+
             <ResponsiveContainer width="100%" height="100%">
                 <BarChart width={200} height={200} data={data}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -51,11 +76,11 @@ class Graph extends React.Component{
                     <YAxis tick={{fontSize:15, fill:'white'}}/>
                     <Tooltip />
                     <Legend verticalAlign="top" iconSize={14} />
-
-                    <Bar dataKey="Recommended4U" name='Daily nutrient in %' legendType={"line"} label={{ fill: 'green', fontSize: 15 }} fill="#82ca9d" />
+                    <Bar dataKey="Recommended4U" onClick={this.updateGraph} name='Daily nutrient in %' legendType={"line"} label={{ fill: 'green', fontSize: 15 }} fill="#82ca9d" />
                     <ReferenceLine strokeWidth={3} y={100} alwaysShow={true} isFront={true} label={{value:'Your Goal For Today', fill: 'white', fontSize: 20 }}  stroke="red" strokeDasharray="3 3" />
                 </BarChart>
             </ResponsiveContainer>
+
         );
         // <Bar dataKey="Recommended" legendType={"line"} label={{ fill: 'blue', fontSize: 15 }} fill="#8884d8" />
     }

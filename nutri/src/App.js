@@ -27,7 +27,7 @@ function App() {
           </div>
 
           <div className="graph">
-            <Graph/>
+            <Graph userId={UserId}/>
           </div>
           
           
