@@ -47,7 +47,7 @@ class Graph extends React.Component{
         })
     };
     async getFoodEaten() {
-        await axios.get("http://localhost:3001/api/nutrients", {params: {user_id:this.props.userId}}).then((res)=>{
+        await axios.get("http://localhost:3001/api/foodEaten", {params: {user_id:this.props.userId}}).then((res)=>{
             this.setState({
                 recommendedValues: res.data
             });
@@ -61,7 +61,10 @@ class Graph extends React.Component{
 
     async componentWillReceiveProps(nextProps) {
         console.log("PROPS HAS CHANGED")
-        this.getRecommendedValues().then(()=>{
+        // this.getRecommendedValues().then(()=>{
+        //     //this.setState()
+        // })
+        this.getFoodEaten().then(()=>{
             //this.setState()
         })
     }

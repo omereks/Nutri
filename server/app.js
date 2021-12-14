@@ -160,8 +160,8 @@ app.post("/api/deleteFood",(req,res) =>{
 
 app.get("/api/nutrients", (req,res) => {
   // console.log(req)
-  const id = req.query.user;
-  const query = "SELECT nutrient_id, amount FROM nurti.recommended_values_per_users WHERE user_id=5555;"
+  const id = req.query.user_id;
+  const query = "SELECT nutrient_id, amount FROM nurti.recommended_values_per_users WHERE user_id=" +id+ ";"
   db.query(query, function (err, result, fields) {
     //console.log(result)
     res.send(result)
@@ -170,4 +170,18 @@ app.get("/api/nutrients", (req,res) => {
   );
 })
 
+app.get("/api/foodEaten", (req,res) => {
+  // console.log(req)
+  const id = req.query.user_id;
+  const query = "SELECT nurti.food_values.nutrient_id, nurti.food_values.amount AS valAmount, t.amount AS foodAmount " +
+  "FROM nurti.food_values " +
+  "RIGHT JOIN (SELECT food_id, amount FROM nurti.food_eaten WHERE user_id=22) AS t " +
+  "ON nurti.food_values.food_id=t.food_id;"
+  db.query(query, function (err, result, fields) {
+        console.log(result)
+        res.send(result)
+      }
+      // nutrient_id, amount
+  );
+})
 module.exports = app;
