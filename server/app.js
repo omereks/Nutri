@@ -160,15 +160,14 @@ app.post("/api/deleteFood",(req,res) =>{
 
 app.get("/api/nutrients", (req,res) => {
   // console.log(req)
-  const id = req.query.user_id;
-  var resultQ = 3;
-  const query = "SELECT * FROM nurti.recommended_values_per_users WHERE user_id=5555;"
+  const id = req.query.user;
+  const query = "SELECT nutrient_id, amount FROM nurti.recommended_values_per_users WHERE user_id=5555;"
   db.query(query, function (err, result, fields) {
-
-    // console.log(result)
-     res.send(result)
+    console.log(result)
+    res.send(result)
       }
+      // nutrient_id, amount
   );
 })
-//
+
 module.exports = app;
