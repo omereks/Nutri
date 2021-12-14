@@ -163,7 +163,7 @@ app.get("/api/nutrients", (req,res) => {
   const id = req.query.user;
   const query = "SELECT nutrient_id, amount FROM nurti.recommended_values_per_users WHERE user_id=5555;"
   db.query(query, function (err, result, fields) {
-    console.log(result)
+    //console.log(result)
     res.send(result)
       }
       // nutrient_id, amount

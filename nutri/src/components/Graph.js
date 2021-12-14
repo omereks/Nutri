@@ -34,30 +34,38 @@ class Graph extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            userRecommendedValues: {},
-            userEatenValues: {},
         }
     }
 
-    async getData() {
+    async getRecommendedValues() {
         await axios.get("http://localhost:3001/api/nutrients", {params: {user_id:this.props.userId}}).then((res)=>{
             this.setState({
-                data: res.data
+                recommendedValues: res.data
             });
+            //console.log(res.data[0].amount)
             console.log(res.data)
         })
     };
-
+    async getFoodEaten() {
+        await axios.get("http://localhost:3001/api/nutrients", {params: {user_id:this.props.userId}}).then((res)=>{
+            this.setState({
+                recommendedValues: res.data
+            });
+            //console.log(res.data[0].amount)
+            console.log(res.data)
+        })
+    };
     async componentDidMount() {
 
     }
+
     async componentWillReceiveProps(nextProps) {
         console.log("PROPS HAS CHANGED")
-        this.getData().then(()=>{
-            this.setState()
+        this.getRecommendedValues().then(()=>{
+            //this.setState()
         })
     }
-
+//
     render() {
         return (
             <ResponsiveContainer width="100%" height="100%">
