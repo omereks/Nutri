@@ -142,7 +142,7 @@ print("finish upload food_values")
 #food_eaten
 print("create food_eaten table")
 mycursor.execute("CREATE TABLE `nurti`.`food_eaten` (" \
-                    "`id` INT NOT NULL," \
+                    "`id` INT NOT NULL AUTO_INCREMENT," \
                     "`user_id` INT NULL," \
                     "`food_id` VARCHAR(45) NULL," \
                     "`amount` INT NULL," \
@@ -151,7 +151,7 @@ mycursor.execute("CREATE TABLE `nurti`.`food_eaten` (" \
 print("finish upload food_eaten")
 
 
-#food_eaten
+#recommended_values
 print("create recommended_values table")
 mycursor.execute("CREATE TABLE `nurti`.`recommended_values` (" \
                     "`ID` INT NOT NULL," \
