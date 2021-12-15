@@ -40,8 +40,11 @@ mycursor.execute("CREATE SCHEMA `nurti`")
 
 #Food
 print("create food table..")
+# TODO added name food
 mycursor.execute("CREATE TABLE `nurti`.`food` ( \
                     `food_id` INT NOT NULL, \
+                    `category` VARCHAR(999) NULL, \
+                    `main_food` VARCHAR(999) NULL, \
                     `description` VARCHAR(999) NULL, \
                     PRIMARY KEY (`food_id`))")
 
@@ -56,12 +59,15 @@ for i,row in empdata.iterrows():
         print(str(p) + "%")
         p = p + 10
     food_id = row[0]
+    food_category = row[1]
     food_description = row[2]
-    query = "INSERT INTO `nurti`.`food` (`food_id`, `description`) VALUES (%s, %s);"
+    query = "INSERT INTO `nurti`.`food` (`food_id`,`category`, `main_food`, `description`) VALUES (%s, %s, %s, %s);"
     if type(food_description) is float and math.isnan(food_description):
         food_description = "empty"
+    main_food_split = food_description.split(',')
+    main_food = main_food_split[0]
     food_description = food_description.replace(",", "")
-    val = (food_id, food_description)
+    val = (food_id, food_category, main_food, food_description)
     mycursor.execute(query, val)
     if FLAG100 == 1 and i == 100:
         break
