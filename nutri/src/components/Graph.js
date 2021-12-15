@@ -13,11 +13,11 @@ class Graph extends React.Component{
         this.updateGraph = this.updateGraph.bind(this);
     }
 
+
     updateGraph(){
-        // graph = {
-        //     name: ,
-        //     precents:
-        // }
+        //for (var key in this.state.foodEaten) {
+
+        //}
     }
 
 
@@ -35,12 +35,13 @@ class Graph extends React.Component{
             this.setState({
                 foodEaten: res.data
             });
+            this.updateGraph()
             //console.log(res.data[0].amount)
             console.log("FROM FOOD EATEN", res.data)
         })
     };
     async componentDidMount() {
-        this.setState({data: vars})
+        //this.setState({data: graph})
     }
 
     async componentWillReceiveProps(nextProps) {
@@ -61,45 +62,19 @@ class Graph extends React.Component{
     render() {
         return (
             <ResponsiveContainer width="100%" height="100%">
-                <BarChart width={200} height={200} data={this.state.data}>
+                <BarChart width={200} height={200} data={this.state.foodEaten}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" tick={{fontSize: 15, fill:'white'}} />
+                    <XAxis dataKey="nutrient_name" tick={{fontSize: 15, fill:'white'}} />
                     <YAxis tick={{fontSize:15, fill:'white'}}/>
                     <Tooltip />
                     <Legend verticalAlign="top" iconSize={14} />
-                    <Bar dataKey="Recommended" onClick={this.updateGraph} name='Daily nutrient in %' legendType={"line"} label={{ fill: 'green', fontSize: 15 }} fill="#82ca9d" />
-                    <ReferenceLine strokeWidth={3} y={100} alwaysShow={true} isFront={true} label={{value:'Your Goal For Today', fill: 'white', fontSize: 20 }}  stroke="red" strokeDasharray="3 3" />
+                    <Bar dataKey="total" onClick={this.updateGraph} name='Daily nutrient' legendType={"line"} label={{ fill: 'green', fontSize: 15 }} fill="#82ca9d" />
                 </BarChart>
             </ResponsiveContainer>
-        );
+
+        ); // DONT DELETE: <ReferenceLine strokeWidth={3} y={100} alwaysShow={true} isFront={true} label={{value:'Your Goal For Today', fill: 'white', fontSize: 20 }}  stroke="red" strokeDasharray="3 3" />
     }
 }
 
-const vars = [
-    {
-        name: 'Carbon',
-        Recommended: 75
-    },
-    {
-        name: 'Proteins',
-        Recommended: 120
-    },
-    {
-        name: 'Fats',
-        Recommended: 75
-    },
-    {
-        name: 'Vitamins',
-        Recommended: 65
-    },
-    {
-        name: 'Minerals',
-        Recommended: 45
-    },
-    {
-        name: 'Dietary fibre',
-        Recommended: 27
-    },
-]
 
 export default Graph;
