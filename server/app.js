@@ -161,27 +161,33 @@ app.post("/api/deleteFood",(req,res) =>{
 app.get("/api/nutrients", (req,res) => {
   // console.log(req)
   const id = req.query.user_id;
-  const query = "SELECT nutrient_id, amount FROM nurti.recommended_values_per_users WHERE user_id=" +id+ ";"
+  const query = "SELECT t.nutrient_id, t.amount, nurti.nutrient.nutrient_name\n" +
+      "FROM (SELECT nutrient_id, amount\n" +
+      "\t\tFROM nurti.recommended_values_per_users\n" +
+      "\t\tWHERE user_id=1212) AS t\n" +
+      "JOIN nurti.nutrient\n" +
+      "ON t.nutrient_id=nurti.nutrient.nutrient_id;"
   db.query(query, function (err, result, fields) {
-    //console.log(result)
+    console.log("FROM NUTRIENTS", result)
     res.send(result)
       }
-      // nutrient_id, amount
   );
 })
 
 app.get("/api/foodEaten", (req,res) => {
   // console.log(req)
   const id = req.query.user_id;
-  const query = "SELECT nurti.food_values.nutrient_id, nurti.food_values.amount AS valAmount, t.amount AS foodAmount " +
-  "FROM nurti.food_values " +
-  "RIGHT JOIN (SELECT food_id, amount FROM nurti.food_eaten WHERE user_id=22) AS t " +
-  "ON nurti.food_values.food_id=t.food_id;"
+  const query = "SELECT nurti.nutrient.nutrient_id, nurti.nutrient.nutrient_name, f.valAmount, f.foodAmount\n" +
+      "FROM nurti.nutrient\n" +
+      "RIGHT JOIN (SELECT nurti.food_values.nutrient_id, nurti.food_values.amount AS valAmount, t.amount AS foodAmount\n" +
+      "\t\t\tFROM nurti.food_values\n" +
+      "\t\t\tRIGHT JOIN (SELECT food_id, amount FROM nurti.food_eaten WHERE user_id=" + id + ") AS t\n" +
+      "\t\t\tON nurti.food_values.food_id=t.food_id) as f\n" +
+      "ON nurti.nutrient.nutrient_id=f.nutrient_id;"
   db.query(query, function (err, result, fields) {
-        console.log(result)
+        console.log("FROM FOOD EATEN", result)
         res.send(result)
       }
-      // nutrient_id, amount
   );
 })
 module.exports = app;
