@@ -134,7 +134,6 @@ app.post("/api/updateAmount",(req,res) =>{
 app.post("/api/deleteFood",(req,res) =>{
   const use = "USE nurti;"
   db.query(use)
-  console.log(req)
   const foodRemoveName=req.body.params.foodValue
   // find  the food id 
   const idquery = "SELECT food_id FROM nurti.food WHERE description='"+foodRemoveName+"';"  // the id of the food (return null if it dont exists)
