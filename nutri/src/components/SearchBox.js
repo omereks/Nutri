@@ -2,6 +2,7 @@ import React from "react";
 import './SearchBox.css';
 import axios from "axios";
 import UserFood from "./userFood";
+import './userFood.css';
 
 export default class SearchBox extends React.Component{
 
@@ -23,6 +24,7 @@ export default class SearchBox extends React.Component{
             suggestions: [],
             text: '',
             foodsList:[],
+            didntLogin: false,
         };
     }
 
@@ -136,10 +138,12 @@ removeFood = (v)=>{
        const { text} = this.state;
         return (
             <div className="SearchBox">
-                <button onClick={this.addFood}>Add!</button>
+                <button onClick={this.addFood} disabled={this.state.didntLogin}>Add!</button>
                 <input value={text} onChange={this.onTextChanged} type="text" />
                 {this.renderSuggestions()}
-                {this.foods.map(f => <UserFood  key={f.foodId} id={f.foodId} valueName={f.foodsname} foodAmount={f.foodAmount} removeFunction={this.removeFood}></UserFood>)}
+                <div className="userFood">
+                {this.foods.map(f => <UserFood key={f.foodId} id={f.foodId} valueName={f.foodsname} foodAmount={f.foodAmount} removeFunction={this.removeFood}></UserFood>)}
+                </div>
             </div>
             
         )
