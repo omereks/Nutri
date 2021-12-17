@@ -4,6 +4,7 @@ import Users from './components/users'
 import Search from './components/search'
 import Graph from './components/Graph'
 import SearchBox from './components/SearchBox';
+
 function App() {
 
   const [UserId, setUserId] = React.useState(0);
@@ -26,7 +27,7 @@ function App() {
           </div>
 
           <div className="graph">
-            <Graph/>
+            <Graph userId={UserId}/>
           </div>
           
           
