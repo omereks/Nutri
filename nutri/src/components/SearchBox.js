@@ -2,6 +2,7 @@ import React from "react";
 import './SearchBox.css';
 import axios from "axios";
 import UserFood from "./userFood";
+import './userFood.css';
 
 export default class SearchBox extends React.Component{
 
@@ -15,17 +16,50 @@ export default class SearchBox extends React.Component{
 *************************************************************************************************/
     constructor(props) {
         super(props);
-        this.count = {
-            counter:0,
-        }
         this.foods = []
         this.state = {
             suggestions: [],
             text: '',
             foodsList:[],
-        };
-    }
+            didntLogin: true,
+            userId: this.props.userId,
+            getThis:this.getThis.bind(this),
 
+        };
+
+    }
+/************************************************************************************************
+ * FUNCTION NAME: getThis
+ * details: this function change the foods the user eat accorden the user id
+*************************************************************************************************/
+     getThis = (newFoods) =>{
+        this.foods = newFoods
+        this.setState(this.foods)
+        this.setState(this.statedidntLogin)
+    }
+/************************************************************************************************
+ * FUNCTION NAME: getDerivedStateFromProps
+ * details: built in function in react that activiate every time props update.
+*************************************************************************************************/
+    static getDerivedStateFromProps(props, state) {
+        if(props.userId !== state.userId){
+            //Change in props
+            state.didntLogin = false
+            axios.get("http://localhost:3001/api/userFoodList", {params: {userID:props.userId}}).then((newVal) => {
+                 var x = newVal.data
+                 var re = x.map(function(row){
+                    return {foodId:row.food_id,userId:props.userId,foodsname:row.description,foodAmount:row.amount}
+                })
+                state.getThis(re)
+                //this.setState(this.foods)
+
+            })
+            return{
+                userId: props.userId
+            };
+        }
+        return null; // No change to state
+    }
 /************************************************************************************************
  * FUNCTION NAME: onTextChanged
  * details: this function work when we type/change somthing in the search food bar, this function
@@ -36,10 +70,8 @@ export default class SearchBox extends React.Component{
         let suggestions = [];
         if(value.length > 0 ){
             axios.get("http://localhost:3001/api/foodexist", {params: {foodname:value}}).then((newVal) => { // go to the server and request the top five food with prefix of the input(value)
-                //console.log(newVal.data) Delete later (for debug)
                 suggestions = newVal.data
                 this.food = e.target.value
-                //console.log(suggestions) // Delete later (for debug)
                 this.setState(() => ({suggestions,text: value}));
             })
             //const regex = new RegExp(`^${value}`,'i' ) // for testing  Dont TOUCH! i delete later.
@@ -49,7 +81,6 @@ export default class SearchBox extends React.Component{
         this.setState(() => ({suggestions,text: value}));
 
     }
-    //this.setState(() => ({suggestions,text: value})); # delete later
 }
 /************************************************************************************************
  * FUNCTION NAME: addFood
@@ -64,24 +95,23 @@ addFood = (v) =>{
     }
     // check if it exists so we change the count
     const inputName = this.state.text
-    var existsValue = this.foods.filter(c => c.foodsname == inputName) // return the value if exists otherwise return empty list
+    var existsValue = this.foods.filter(c => c.foodsname == inputName && c.userId == this.props.userId) // return the value if exists otherwise return empty list
     if (existsValue.length != 0) { // if the value is already exists we upload it
         const newAmount = existsValue[0].foodAmount + 1
         const existId = existsValue[0].foodId
         const fv = inputName
         const newFoods = this.foods.filter(c => c.foodsname != inputName)
-        newFoods.push({foodId: existId,foodsname: fv,foodAmount:newAmount}) 
+        newFoods.push({foodId: existId,foodsname: fv,foodAmount:newAmount,userId:this.props.userId}) 
         this.foods = newFoods
         this.setState(this.foods)
-        axios.post("http://localhost:3001/api/updateAmount",{params: {foodId:existId,foodAmount:newAmount}}) // send post request with the food_id and food count.
+        axios.post("http://localhost:3001/api/updateAmount",{params: {foodId:existId,foodAmount:newAmount,userId:this.props.userId}}) // send post request with the food_id and food count.
         
     }else{ // if we here that means that is a new name which can be false name (not in db) so we check if its in the db and after that we enter to the db (the server doing both in one request)
-    axios.post("http://localhost:3001/api/addFood",{params: {foodId:this.count.counter,foodValue:inputName,foodAmount:1,userId:this.props.userId}}).then((succes) => {
+    axios.post("http://localhost:3001/api/addFood",{params: {foodValue:inputName,foodAmount:1,userId:this.props.userId}}).then((succes) => {
         if(succes.data == false){
             window.alert("not in database, try diffrent name convention")
         }else{
-            this.foods.push({foodId: this.count.counter,foodsname: this.state.text,foodAmount:1})
-            this.count.counter = this.count.counter + 1
+            this.foods.push({foodId: Number(succes.data),userId:this.props.userId,foodsname: this.state.text,foodAmount:1})
             this.setState(this.foods) 
         }
     })
@@ -102,9 +132,9 @@ removeFood = (v)=>{
         // reduce the amount from list.
         this.foods[indexFood].foodAmount = counter - 1
         this.setState(this.foods)
-        axios.post("http://localhost:3001/api/updateAmount",{params: {foodId:existId,foodAmount:newAmount}})
+        axios.post("http://localhost:3001/api/updateAmount",{params: {foodId:existId,foodAmount:newAmount,userId:this.props.userId}})
     }else{
-        axios.post("http://localhost:3001/api/deleteFood",{params: {foodValue:inputValue}})
+        axios.post("http://localhost:3001/api/deleteFood",{params: {foodValue:inputValue,userId:this.props.userId}})
         this.foods.splice(indexFood,1)
         this.setState(this.foods)
     }
@@ -136,10 +166,12 @@ removeFood = (v)=>{
        const { text} = this.state;
         return (
             <div className="SearchBox">
-                <button onClick={this.addFood}>Add!</button>
+                <button onClick={this.addFood} disabled={this.state.didntLogin}>Add!</button>
                 <input value={text} onChange={this.onTextChanged} type="text" />
                 {this.renderSuggestions()}
-                {this.foods.map(f => <UserFood  key={f.foodId} id={f.foodId} valueName={f.foodsname} foodAmount={f.foodAmount} removeFunction={this.removeFood}></UserFood>)}
+                <div className="userFood">
+                {this.foods.map(f => <UserFood key={f.foodId} id={f.foodId} valueName={f.foodsname} foodAmount={f.foodAmount} removeFunction={this.removeFood}></UserFood>)}
+                </div>
             </div>
             
         )

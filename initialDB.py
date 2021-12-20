@@ -5,7 +5,7 @@ import math
 import mysql.connector
 import pandas as pd
 
-FLAG100 = 1
+FLAG100 = 0
 FLAGDEl = 1
 
 

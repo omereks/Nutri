@@ -12,41 +12,42 @@
   color: white;
 }
 
-.user{
-  border-style:dashed;
+.user {
+  border-style: dashed;
   border-radius: 1cm;
   border-color: black;
-  height:fit-content;
+  height: fit-content;
   padding-top: 10px;
   padding-bottom: 10px;
   width: 70%;
 }
-.bottom{
-  border-style:dashed;
+.bottom {
+  border-style: dashed;
   border-radius: 1cm;
   border-color: black;
   width: 70%;
   display: table-cell;
 }
-.search{
+.search {
   display: inline-block;
   width: 45%;
   border-radius: 1cm;
-  border-color:rgb(83, 52, 52);
-  border-style:dashed;
+  border-color: rgb(83, 52, 52);
+  border-style: dashed;
   height: 400px;
-
+  position: relative;
+  float: left;
 }
-.graph{
+.graph {
   display: inline-block;
   width: 45%;
   border-radius: 1cm;
-  border-color:rgb(83, 52, 52);
-  border-style:dashed;
+  border-color: rgb(83, 52, 52);
+  border-style: dashed;
   height: 400px;
 }
 
-.APP-Component{
+.APP-Component {
   margin: 150px auto 0 auto;
   width: 400px;
 }
