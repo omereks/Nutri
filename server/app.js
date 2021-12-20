@@ -147,7 +147,9 @@ app.post("/api/deleteFood",(req,res) =>{
     }
   })
 })
-
+/************************************************************************************************
+ * get: get the food list of specific user 
+*************************************************************************************************/
 app.get("/api/userFoodList",(req,res) => {
   const use = "USE nurti;"
   db.query(use)
