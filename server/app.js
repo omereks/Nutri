@@ -40,7 +40,6 @@ app.post("/api/addUser", (req,res) => {
 })
 
 app.get("/api/isuser", (req,res) => {
-  // console.log(req)
   const id = req.query.id;
   var resultQ = 3;
   const query = "SELECT COUNT(id) AS exist FROM nurti.users WHERE id="+id+";"
@@ -88,7 +87,8 @@ app.post("/api/addFood", (req,res) =>{
     const use = 'USE nurti;'
     db.query(use)
     // check if the food exists in the foods table
-    const idquery = "SELECT food_id FROM nurti.food WHERE description='"+foodAdd+"';"  // the id of the food (return null if it dont exists)
+    foodAddString = JSON.stringify(foodAdd)
+    const idquery = "SELECT food_id FROM nurti.food WHERE description="+foodAddString+";"  // the id of the food (return null if it dont exists)
     db.query(idquery,function(err,result,fields){
       if(err){
         console.log(err)
@@ -96,10 +96,8 @@ app.post("/api/addFood", (req,res) =>{
         if(result.length == 0){
           res.send("false")
         }else{
-          foodEatenObject = "hi"//{id:req.body.params.foodId,user_id:"anonymous",food_id=result,amount:req.body.params.foodAmount}
           food_id = result[0].food_id
           const insertQuery = "INSERT INTO nurti.food_eaten (user_id,food_id,amount) VALUES ("+req.body.params.userId+","+food_id+","+req.body.params.foodAmount+")"
-          // const insertQuery = "INSERT INTO nurti.food_eaten (id,user_id,food_id,amount) VALUES ("+req.body.params.foodId+","+req.body.params.userId+","+food_id+","+req.body.params.foodAmount+")"
           db.query(insertQuery,function(err,result,fields){
             if(err){
               console.log(err)
@@ -107,7 +105,7 @@ app.post("/api/addFood", (req,res) =>{
               
             }
           })
-          res.send("True")
+          res.send(food_id.toString())
         }
       }
     })
@@ -118,7 +116,7 @@ app.post("/api/addFood", (req,res) =>{
 app.post("/api/updateAmount",(req,res) =>{
   const use = "USE nurti;"
   db.query(use)
-  const changeAmountQuery = "UPDATE nurti.food_eaten SET amount="+req.body.params.foodAmount+" WHERE id="+req.body.params.foodId+";"
+  const changeAmountQuery = "UPDATE nurti.food_eaten SET amount="+req.body.params.foodAmount+" WHERE food_id="+req.body.params.foodId+" AND user_id="+req.body.params.userId+";"
   db.query(changeAmountQuery,function(err,result,fields){
     if(err){
       console.log(err)
@@ -133,19 +131,37 @@ app.post("/api/updateAmount",(req,res) =>{
 *************************************************************************************************/
 app.post("/api/deleteFood",(req,res) =>{
   const use = "USE nurti;"
+  const userId = req.body.params.userId
   db.query(use)
   const foodRemoveName=req.body.params.foodValue
   // find  the food id 
-  const idquery = "SELECT food_id FROM nurti.food WHERE description='"+foodRemoveName+"';"  // the id of the food (return null if it dont exists)
+  foodToRemove = JSON.stringify(foodRemoveName)
+  const idquery = "SELECT food_id FROM nurti.food WHERE description="+foodToRemove+";"  // the id of the food (return null if it dont exists)
   db.query(idquery,function(err,result,fields){
     if(err){
       console.log(err)
     }else{
       food_id = result[0].food_id // the food id
-      const deleteQuery = "DELETE FROM nurti.food_eaten WHERE food_id="+food_id+";"
+      const deleteQuery = "DELETE FROM nurti.food_eaten WHERE food_id="+food_id+" AND user_id="+userId+";"
       db.query(deleteQuery)
     }
   })
+})
+
+app.get("/api/userFoodList",(req,res) => {
+  const use = "USE nurti;"
+  db.query(use)
+  var foodList = []
+  const userQueryFood = "SELECT food_eaten.food_id,food.description,food_eaten.amount FROM nurti.food_eaten INNER JOIN nurti.food ON food_eaten.food_id = food.food_id WHERE food_eaten.user_id="+req.query.userID+";"
+  db.query(userQueryFood,function(err,result,fields){
+    if(err){
+      console.log(err)
+    }else{
+      foodList = result
+      res.send(foodList)
+    }
+  })
+  //res.send("hi")
 })
 
 module.exports = app;
