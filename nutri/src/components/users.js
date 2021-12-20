@@ -38,7 +38,7 @@ class Users extends React.Component{
                                 console.log(this.state.newUser)
                                 Axios.get("http://localhost:3001/api/isuser", {params: {id:this.state.userID}})
                                 .then((val)=> {
-                                    console.log(val)
+                                    //console.log(val)
                                     if(val.data){
                                         this.setState({newUser: false})
                                         this.props.chengeUserId(this.state.userID)

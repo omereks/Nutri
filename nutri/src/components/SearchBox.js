@@ -74,7 +74,7 @@ export default class SearchBox extends React.Component{
                 this.food = e.target.value
                 this.setState(() => ({suggestions,text: value}));
             })
-            //const regex = new RegExp(`^${value}`,'i' ) // for testing  Dont TOCH! i delete later.
+            //const regex = new RegExp(`^${value}`,'i' ) // for testing  Dont TOUCH! i delete later.
             //suggestions = this.items.sort().filter(v=> regex.test(v)) // for testing
     }else{
         let suggestions = [];

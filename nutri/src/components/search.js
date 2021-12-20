@@ -11,7 +11,7 @@ class Search extends React.Component{
     render() {
         return (
             <div className="Main">
-                Search Food
+                Search For Food
             </div>
           );
     }
