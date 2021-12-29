@@ -4,11 +4,12 @@ import Users from './components/users'
 import Search from './components/search'
 import Graph from './components/Graph'
 import SearchBox from './components/SearchBox';
+import {Button} from "reactstrap";
 
 function App() {
 
   const [UserId, setUserId] = React.useState(0);
-  
+
 
   return (
     <div className="App">
@@ -28,8 +29,6 @@ function App() {
           <div className="graph">
             <Graph userId={UserId}/>
           </div>
-          
-          
         </div>
 
       </header>

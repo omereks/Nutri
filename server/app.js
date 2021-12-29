@@ -170,16 +170,17 @@ app.get("/api/userFoodList",(req,res) => {
 app.get("/api/nutrients", (req,res) => {
   // console.log(req)
   const id = req.query.user_id;
+
   // find recommended values for specific user and joins them with their names
   const query = "SELECT t.nutrient_id, t.amount, nurti.nutrient.nutrient_name\n" +
       "FROM (SELECT nutrient_id, amount\n" +
       "\t\tFROM nurti.recommended_values_per_users\n" +
-      "\t\tWHERE user_id=1212) AS t\n" +
+      "\t\tWHERE user_id="+id+") AS t\n" +
       "JOIN nurti.nutrient\n" +
       "ON t.nutrient_id=nurti.nutrient.nutrient_id\n" +
       "ORDER BY t.nutrient_id ASC;"
   db.query(query, function (err, result, fields) {
-    console.log("FROM NUTRIENTS", result)
+    //console.log("FROM NUTRIENTS", result)
     res.send(result)
       }
   );
@@ -196,13 +197,14 @@ app.get("/api/foodEaten", (req,res) => {
   "FROM nurti.nutrient\n" +
   "RIGHT JOIN (SELECT nurti.food_values.nutrient_id, nurti.food_values.amount AS valAmount, t.amount AS foodAmount\n" +
   "FROM nurti.food_values\n" +
-  "RIGHT JOIN (SELECT food_id, amount FROM nurti.food_eaten WHERE user_id=22) AS t\n" +
+  "RIGHT JOIN (SELECT food_id, amount FROM nurti.food_eaten WHERE user_id="+id+") AS t\n" +
   "ON nurti.food_values.food_id=t.food_id) as f\n" +
   "ON nurti.nutrient.nutrient_id=f.nutrient_id\n" +
   "ORDER BY nurti.nutrient.nutrient_id ASC) AS r\n" +
   "GROUP BY r.nutrient_name;"
+  //const q1 = "SELECT * FROM nurti.food_eaten"
   db.query(query, function (err, result, fields) {
-        console.log("FROM FOOD EATEN", result)
+        //console.log("FROM FOOD EATEN", result)
         res.send(result)
       }
   );
