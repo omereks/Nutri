@@ -40,27 +40,27 @@ class Graph extends React.Component{
             },
             {
                 nutrient_name: "Vitamin A, RAE",
-                nameForGraph: "Vitamin A",
+                nameForGraph: "V. A",
                 total: 0
             },
             {
                 nutrient_name: "Vitamin D (D2 + D3)",
-                nameForGraph: "Vitamin D",
+                nameForGraph: "V. D",
                 total: 0
             },
             {
                 nutrient_name: "Vitamin B-12",
-                nameForGraph: "Vitamin B-12",
+                nameForGraph: "V. B-12",
                 total: 0
             },
             {
                 nutrient_name: "Vitamin C, added",
-                nameForGraph: "Vitamin C",
+                nameForGraph: "V. C",
                 total: 0
             },
             {
                 nutrient_name: "Vitamin E, added)",
-                nameForGraph: "Vitamin E",
+                nameForGraph: "V. E",
                 total: 0
             }
             ]
@@ -125,16 +125,34 @@ class Graph extends React.Component{
         return (
             <div>
                 <Button onClick={this.refreshGraph} >Calculate</Button>
-                <BarChart width={600} height={350} data={this.state.precents}>
-                    <XAxis dataKey="nameForGraph" tick={{fontSize: 12, fill:'white'}} />
+                <BarChart width={650} height={300} data={this.state.precents}>
+                    <XAxis dataKey="nameForGraph" minTickGap={1} tick={{fontSize: 14, fill:'green'}} />
                     <YAxis tick={{fontSize:15, fill:'white'}}/>
                     <Legend verticalAlign="top" iconSize={14} />
                     <ReferenceLine strokeWidth={3} y={100} alwaysShow={true} isFront={true} label={{value:'Your Goal For Today', fill: 'white', fontSize: 20 }}  stroke="red" strokeDasharray="3 3" />
-                    <Bar  dataKey="total" onClick={this.updateGraph} name='Daily %' legendType={"line"} label={{ fill: 'green', fontSize: 15 }} fill="#82ca9d" />
+                    <Tooltip content="nameForGraph"/>
+                    <Bar  dataKey="total" barSize={35} name='Daily %' legendType={"line"} label={{ fill: 'green', fontSize: 15 }} fill="#82ca9d" />
                 </BarChart>
             </div>
 
         ); // DONT DELETE: <ReferenceLine strokeWidth={3} y={100} alwaysShow={true} isFront={true} label={{value:'Your Goal For Today', fill: 'white', fontSize: 20 }}  stroke="red" strokeDasharray="3 3" />
     }
+
+    // render() {
+    //     return (
+    //         <div>
+    //             <Button onClick={this.refreshGraph} >Calculate</Button>
+    //             <BarChart width={730} height={250} data={this.state.precents}>
+    //                 <CartesianGrid strokeDasharray="3 3" />
+    //                 <XAxis dataKey="nameForGraph" />
+    //                 <YAxis />
+    //                 <Tooltip />
+    //                 <Legend />
+    //                 <Bar dataKey="total" fill="#82ca9d" label={{ fill: 'green', fontSize: 10 }} />
+    //             </BarChart>
+    //         </div>
+    //
+    //     );
+    // }
 }
 export default Graph;
