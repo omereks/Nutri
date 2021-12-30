@@ -14,23 +14,18 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        
         <div className="user">
           <Users chengeUserId={UserId => setUserId(UserId)}/>
         </div>
-
         <div className="bottom">
-          
           <div className="search">
             <Search/>
            <div className="App-Component"> <SearchBox userId={UserId}/></div>
           </div>
-
           <div className="graph">
             <Graph userId={UserId}/>
           </div>
         </div>
-
       </header>
     </div>
   );

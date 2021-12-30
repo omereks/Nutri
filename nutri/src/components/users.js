@@ -35,7 +35,7 @@ class Users extends React.Component{
                             }}/>
                         <Button data-bs-toggle="modal" data-bs-target="#exampleModal" {...!this.state.validID?{disabled:'true'}:""} onClick={(e)=>{
                             if(this.state.validID){
-                                console.log(this.state.newUser)
+                                //console.log(this.state.newUser)
                                 Axios.get("http://localhost:3001/api/isuser", {params: {id:this.state.userID}})
                                 .then((val)=> {
                                     //console.log(val)
@@ -57,7 +57,7 @@ class Users extends React.Component{
                 <div className={this.state.newUser?"gender":"hidden"} >
                             New User :) please select a gender:
                             <Button data-bs-toggle="modal" data-bs-target="#exampleModal"  onClick={(e)=>{
-                            console.log(this.state.newUser)
+                            //console.log(this.state.newUser)
                             Axios.post("http://localhost:3001/api/adduser", {params: {id:this.state.userID, gender:1}})
                             this.setState({newUser: false})
                             }}>

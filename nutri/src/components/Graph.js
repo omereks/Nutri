@@ -10,7 +10,6 @@ class Graph extends React.Component{
         super(props);
         this.state = {
         }
-        //this.updatePercents = updatePercents.bind(this)
     }
 
     async componentDidMount() {
@@ -75,7 +74,7 @@ class Graph extends React.Component{
             this.setState({
                 recommendedValues: res.data
             });
-            console.log("Personal nutrients values:", res.data)
+            //console.log("Personal nutrients values:", res.data)
             try {this.updatePercents()}
             catch (e){}
         })
@@ -85,7 +84,7 @@ class Graph extends React.Component{
             this.setState({
                 foodEaten: res.data
             });
-            console.log("Total nutrients eaten:", res.data)
+            //console.log("Total nutrients eaten:", res.data)
             try {this.updatePercents()}
             catch (e){}
         })
@@ -117,7 +116,7 @@ class Graph extends React.Component{
     }
 
     refreshGraph = () => {
-        console.log("PROPS HAS CHANGED")
+        //console.log("PROPS HAS CHANGED")
         this.getRecommendedValues(this.props.userId)
         this.getFoodEaten(this.props.userId)
 
