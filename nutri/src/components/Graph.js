@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ReferenceLine, ResponsiveContainer } from 'recharts';
 import axios from "axios";
 import {Button} from "reactstrap";
+import ChangeValues from './ChangeValues'
 
 
 class Graph extends React.Component{
@@ -11,6 +12,7 @@ class Graph extends React.Component{
         }
         //this.updatePercents = updatePercents.bind(this)
     }
+
     async componentDidMount() {
         let precents_ = [
             {
@@ -133,26 +135,9 @@ class Graph extends React.Component{
                     <Tooltip content="nameForGraph"/>
                     <Bar  dataKey="total" barSize={35} name='Daily %' legendType={"line"} label={{ fill: 'green', fontSize: 15 }} fill="#82ca9d" />
                 </BarChart>
+                <ChangeValues userId={this.props.userId} values={this.state.recommendedValues}/>
             </div>
-
-        ); // DONT DELETE: <ReferenceLine strokeWidth={3} y={100} alwaysShow={true} isFront={true} label={{value:'Your Goal For Today', fill: 'white', fontSize: 20 }}  stroke="red" strokeDasharray="3 3" />
+        );
     }
-
-    // render() {
-    //     return (
-    //         <div>
-    //             <Button onClick={this.refreshGraph} >Calculate</Button>
-    //             <BarChart width={730} height={250} data={this.state.precents}>
-    //                 <CartesianGrid strokeDasharray="3 3" />
-    //                 <XAxis dataKey="nameForGraph" />
-    //                 <YAxis />
-    //                 <Tooltip />
-    //                 <Legend />
-    //                 <Bar dataKey="total" fill="#82ca9d" label={{ fill: 'green', fontSize: 10 }} />
-    //             </BarChart>
-    //         </div>
-    //
-    //     );
-    // }
 }
 export default Graph;
