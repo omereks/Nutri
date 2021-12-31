@@ -215,44 +215,7 @@ app.post("/api/updateVal",(req,res) =>{
     const updateVal = "UPDATE nurti.recommended_values_per_users " +
     "SET amount = " + newVal +
     " WHERE user_id ="+ userId +" AND nutrient_id =" + valId + ";"
+    db.query("SET SQL_SAFE_UPDATES = 0;")
     db.query(updateVal)
 })
 module.exports = app;
-
-
-
-
-
-
-
-
-
-
-// app.post("/api/updateVal",(req,res) =>{
-//     // this query find the row id of the nutrient in recommended_for_user
-//     let resultOfId = -1
-//     const rowId = "USE nurti; " +
-//         "SELECT id " +
-//         "FROM recommended_values_per_users " +
-//         "WHERE nutrient_id = (SELECT nutrient_id " +
-//         "FROM nutrient " +
-//         "WHERE nutrient_name = "+ valName +") AND user_id =" + userId + ";"
-//     db.query(rowId, function (err, result, fields) {
-//         //resultOfId = result
-//         console.log("ROW ID:", result.data)
-//         // query updates value
-//         const updateVal = "USE nurti; "+
-//             "UPDATE recommended_values_per_users " +
-//             "SET amount = " + newVal +
-//             " WHERE id =" + result.data + "; "
-//         db.query(updateVal)
-//     });
-//     //console.log("ROW ID:", resultOfId)
-//     // query updates value
-//     // const updateVal = "USE nurti; " +
-//     // "UPDATE recommended_values_per_users " +
-//     // "SET amount = " + req.params.newVal +
-//     // " WHERE id =" + resultOfId + "; "
-//     // db.query(updateVal,function(err,result,fields){
-//     // })
-// })
