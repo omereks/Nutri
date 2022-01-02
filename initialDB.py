@@ -19,7 +19,7 @@ def init_mysql():
     db = mysql.connector.connect(host="localhost",
                                  port="3306",
                                  user="root",
-                                 passwd="root",
+                                 passwd="111111",
                                  )
     return db
 
@@ -55,22 +55,27 @@ print("start upload food..")
 maxRows = 1048576
 p = 0
 for i,row in empdata.iterrows():
-    if i % 100000 == 0:
-        print(str(p) + "%")
-        p = p + 10
-    food_id = row[0]
-    food_category = row[1]
-    food_description = row[2]
-    query = "INSERT INTO `nurti`.`food` (`food_id`,`category`, `main_food`, `description`) VALUES (%s, %s, %s, %s);"
-    if type(food_description) is float and math.isnan(food_description):
-        food_description = "empty"
-    main_food_split = food_description.split(',')
-    main_food = main_food_split[0]
-    food_description = food_description.replace(",", "")
-    val = (food_id, food_category, main_food, food_description)
-    mycursor.execute(query, val)
-    if FLAG100 == 1 and i == 100:
-        break
+    try:
+        if i % 100000 == 0:
+            print(str(p) + "%")
+            p = p + 10
+        food_id = row[0]
+        food_category = row[1]
+        food_description = row[2]
+        query = "INSERT INTO `nurti`.`food` (`food_id`,`category`, `main_food`, `description`) VALUES (%s, %s, %s, %s);"
+        if type(food_description) is float and math.isnan(food_description):
+            food_description = "empty"
+        main_food_split = food_description.split(',')
+        main_food = main_food_split[0]
+        food_description = food_description.replace(",", "")
+        food_description = food_description.replace("\"", "")
+        
+        val = (food_id, food_category, main_food, food_description)
+        mycursor.execute(query, val) 
+        if FLAG100 == 1 and i == 100:
+            break
+    except:
+        print("skip")
 db.commit()
 
 print("finished upload food")
@@ -155,7 +160,7 @@ print("finish upload food_eaten")
 print("create recommended_values table")
 mycursor.execute("CREATE TABLE `nurti`.`recommended_values` (" \
                     "`ID` INT NOT NULL," \
-                    "`gender` TINYINT NULL," \
+                    "`gender` TINYINT(1) NULL," \
                     "`nutrient_id` INT NULL," \
                     "`amount` INT NULL," \
                     "PRIMARY KEY (`ID`));")
@@ -192,19 +197,19 @@ db.commit()
 print("create users table")
 mycursor.execute("CREATE TABLE `nurti`.`users` (" \
                     "`id` INT NOT NULL," \
-                    "`gender` TINYINT NULL," \
+                    "`gender` TINYINT(1) NULL," \
                     "PRIMARY KEY (`id`));")
 db.commit()
 print("finish create users")
 
 
-#users
+# recommended_values_per_users
 print("create recommended_values_per_users table")
 mycursor.execute("CREATE TABLE `nurti`.`recommended_values_per_users` (" \
-                    "`id` INT NOT NULL AUTO_INCREMENT," \
-                    "`user_id` INT NULL," \
-                    "`nutrient_id` INT NULL," \
+                    # "`id` INT NOT NULL AUTO_INCREMENT," \
+                    "`user_id` INT NOT NULL," \
+                    "`nutrient_id` INT NOT NULL," \
                     "`amount` INT NULL," \
-                    "PRIMARY KEY (`id`));")
+                    "PRIMARY KEY (`user_id`, `nutrient_id`));")
 db.commit()
 print("finish create recommended_values_per_users")
