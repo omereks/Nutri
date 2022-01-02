@@ -133,12 +133,12 @@ for i,row in empdata.iterrows():
         p = p + 10
     if row[2] not in arrNutrirnts:
         continue
-    ID = i+1
+    # ID = i+1
     food_id = row[1]
     nutrient_id = row[2]
     amount = row[3]
-    query = "INSERT INTO `nurti`.`food_values` (`ID`, `food_id`, `nutrient_id`, `amount`) VALUES (%s,%s,%s,%s);"
-    val = (ID, food_id, nutrient_id, amount)
+    query = "INSERT INTO `nurti`.`food_values` (`food_id`, `nutrient_id`, `amount`) VALUES (%s,%s,%s);"
+    val = (food_id, nutrient_id, amount)
     mycursor.execute(query, val)
 
 db.commit()
@@ -147,11 +147,10 @@ print("finish upload food_values")
 #food_eaten
 print("create food_eaten table")
 mycursor.execute("CREATE TABLE `nurti`.`food_eaten` (" \
-                    "`id` INT NOT NULL AUTO_INCREMENT," \
                     "`user_id` INT NULL," \
                     "`food_id` VARCHAR(45) NULL," \
                     "`amount` INT NULL," \
-                    "PRIMARY KEY (`id`));")
+                    "PRIMARY KEY (`user_id`, `food_id`));")
 
 print("finish upload food_eaten")
 
@@ -167,29 +166,29 @@ mycursor.execute("CREATE TABLE `nurti`.`recommended_values` (" \
 
 print("finish create recommended_values")
 #male = 1 , female 0
-arrTupleNutirient = [(1, 1, 1106, 1000), #A Male
-                (2, 0, 1106, 800),  #A Female
-                (3, 1, 1178, 2),  # B-12 Male
-                (4, 0, 1178, 2),  # B-12 Female
-                (5, 1, 1241, 60),  # c Male
-                (6, 0, 1241, 60),  # c Female
-                (7, 1, 1114, 15),  # d Male
-                (8, 0, 1114, 15),  # d Female
-                (9, 1, 1242, 10),  # e Male
-                (10, 0, 1242, 8),  # e Female
+arrTupleNutirient = [(1, 1106, 1000), #A Male
+                (0, 1106, 800),  #A Female
+                (1, 1178, 2),  # B-12 Male
+                (0, 1178, 2),  # B-12 Female
+                (1, 1241, 60),  # c Male
+                (0, 1241, 60),  # c Female
+                (1, 1114, 15),  # d Male
+                (0, 1114, 15),  # d Female
+                (1, 1242, 10),  # e Male
+                (0, 1242, 8),  # e Female
 
-                (11, 1, 1087, 1000),  # Calcium Male
-                (12, 0, 1087, 1000),  # Calcium Female
-                (13, 1, 1093, 1500),  # Sodium Male
-                (14, 0, 1093, 1500),  # Sodium Female
-                (15, 1, 1008, 2400),  # Energy Male
-                (16, 0, 1008, 1800),  # Energy Female
-                (17, 1, 1003, 75),  # Protein Male
-                (18, 0, 1003, 75),  # Protein Female
-                (19, 1, 1085, 50),  # Fat Male
-                (20, 0, 1085, 50),]  # Fat Female
+                (1, 1087, 1000),  # Calcium Male
+                (0, 1087, 1000),  # Calcium Female
+                (1, 1093, 1500),  # Sodium Male
+                (0, 1093, 1500),  # Sodium Female
+                (1, 1008, 2400),  # Energy Male
+                (0, 1008, 1800),  # Energy Female
+                (1, 1003, 75),  # Protein Male
+                (0, 1003, 75),  # Protein Female
+                (1, 1085, 50),  # Fat Male
+                (0, 1085, 50),]  # Fat Female
 
-mycursor.executemany('INSERT INTO `nurti`.`recommended_values` (`ID`, `gender`, `nutrient_id`, `amount`) VALUES(%s, %s, %s, %s)', arrTupleNutirient)
+mycursor.executemany('INSERT INTO `nurti`.`recommended_values` (`gender`, `nutrient_id`, `amount`) VALUES(%s, %s, %s)', arrTupleNutirient)
 db.commit()
 
 
