@@ -3,6 +3,8 @@ import './SearchBox.css';
 import axios from "axios";
 import UserFood from "./userFood";
 import './userFood.css';
+import { Button,InputGroup,Input,Modal,ModalHeader,ModalBody,ModalFooter } from 'reactstrap';
+
 
 export default class SearchBox extends React.Component{
 
@@ -104,7 +106,9 @@ addFood = (v) =>{
         newFoods.push({foodId: existId,foodsname: fv,foodAmount:newAmount,userId:this.props.userId}) 
         this.foods = newFoods
         this.setState(this.foods)
-        axios.post("http://localhost:3001/api/updateAmount",{params: {foodId:existId,foodAmount:newAmount,userId:this.props.userId}}) // send post request with the food_id and food count.
+        axios.post("http://localhost:3001/api/updateAmount",{params: {foodId:existId,foodAmount:newAmount,userId:this.props.userId}})
+        .then( () => {this.props.chengeListFood(this.foods)})
+         // send post request with the food_id and food count.
         
     }else{ // if we here that means that is a new name which can be false name (not in db) so we check if its in the db and after that we enter to the db (the server doing both in one request)
     axios.post("http://localhost:3001/api/addFood",{params: {foodValue:inputName,foodAmount:1,userId:this.props.userId}}).then((succes) => {
@@ -113,6 +117,7 @@ addFood = (v) =>{
         }else{
             this.foods.push({foodId: Number(succes.data),userId:this.props.userId,foodsname: this.state.text,foodAmount:1})
             this.setState(this.foods) 
+            this.props.chengeListFood(this.foods)
         }
     })
 }
@@ -133,10 +138,12 @@ removeFood = (v)=>{
         this.foods[indexFood].foodAmount = counter - 1
         this.setState(this.foods)
         axios.post("http://localhost:3001/api/updateAmount",{params: {foodId:existId,foodAmount:newAmount,userId:this.props.userId}})
+        .then( () => {this.props.chengeListFood(this.foods)})
     }else{
-        axios.post("http://localhost:3001/api/deleteFood",{params: {foodValue:inputValue,userId:this.props.userId}})
         this.foods.splice(indexFood,1)
         this.setState(this.foods)
+        axios.post("http://localhost:3001/api/deleteFood",{params: {foodValue:inputValue,userId:this.props.userId}})
+        .then( () => {this.props.chengeListFood(this.foods)})
     }
     
 }
@@ -156,7 +163,7 @@ removeFood = (v)=>{
         }
         return (
             <ul>
-            {suggestions.map((item) =>  <li onClick={() => this.suggestionsSelected(item)}>{item}</li>)}
+                {suggestions.map((item) =>  <li onClick={() => this.suggestionsSelected(item)}>{item}</li>)}
             </ul>
         );
 
@@ -166,12 +173,15 @@ removeFood = (v)=>{
        const { text} = this.state;
         return (
             <div className="SearchBox">
-                <button onClick={this.addFood} disabled={this.state.didntLogin}>Add!</button>
-                <input value={text} onChange={this.onTextChanged} type="text" />
+                <InputGroup>
+                    <Input placeholder="please login to add Food"  value={text} disabled={this.state.didntLogin} onChange={this.onTextChanged} type="text" />
+                    <Button onClick={this.addFood} disabled={this.state.didntLogin}>Add!</Button>
+                </InputGroup>
                 {this.renderSuggestions()}
                 <div className="userFood">
                 {this.foods.map(f => <UserFood key={f.foodId} id={f.foodId} valueName={f.foodsname} foodAmount={f.foodAmount} removeFunction={this.removeFood}></UserFood>)}
                 </div>
+                
             </div>
             
         )

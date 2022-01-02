@@ -3,7 +3,6 @@
 }
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,9 +12,6 @@
 }
 
 .user {
-  border-style: dashed;
-  border-radius: 1cm;
-  border-color: black;
   height: fit-content;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -26,25 +22,24 @@
   border-radius: 1cm;
   border-color: black;
   width: 70%;
-  display: table-cell;
 }
 .search {
-  display: inline-block;
-  width: 45%;
-  border-radius: 1cm;
-  border-color: rgb(83, 52, 52);
-  border-style: dashed;
-  height: 400px;
+  width: 65%;
+  height: 300px;
   position: relative;
   float: left;
+  background-color: #3c424e;
+  border-radius: 25px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+
 }
 .graph {
-  display: inline-block;
-  width: 45%;
-  border-radius: 1cm;
-  border-color: rgb(83, 52, 52);
-  border-style: dashed;
-  height: 400px;
+  width: 65%;
+  background-color: #3c424e;
+  border-radius: 25px;
+  margin-top: 25px;
 }
 
 .APP-Component {

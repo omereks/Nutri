@@ -2,6 +2,10 @@ import React, { PureComponent } from 'react';
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ReferenceLine, ResponsiveContainer } from 'recharts';
 import axios from "axios";
 import {Button} from "reactstrap";
+import RefreshIcon from '@mui/icons-material/Refresh';
+import ChangeValues from './ChangeValues'
+import "./Graph.css";
+import IconButton from '@mui/material/IconButton';
 
 
 
@@ -10,71 +14,150 @@ class Graph extends React.Component{
         super(props);
         this.state = {
         }
-        this.updateGraph = this.updateGraph.bind(this);
     }
 
-
-    updateGraph(){
-        //for (var key in this.state.foodEaten) {
-
-        //}
+    async componentDidMount() {
+        let precents_ = [
+            {
+                nutrient_name: "Protein",
+                nameForGraph: "Protein",
+                total: 0
+            },
+            {
+                nutrient_name: "Energy",
+                nameForGraph: "Energy",
+                total: 0
+            },
+            {
+                nutrient_name: "Total fat",
+                nameForGraph: "Fat",
+                total: 0
+            },
+            {
+                nutrient_name: "Calcium, Ca",
+                nameForGraph: "Calcium",
+                total: 0
+            },
+            {
+                nutrient_name: "Sodium, Na",
+                nameForGraph: "Sodium",
+                total: 0
+            },
+            {
+                nutrient_name: "Vitamin A, RAE",
+                nameForGraph: "V. A",
+                total: 0
+            },
+            {
+                nutrient_name: "Vitamin D (D2 + D3)",
+                nameForGraph: "V. D",
+                total: 0
+            },
+            {
+                nutrient_name: "Vitamin B-12",
+                nameForGraph: "V. B-12",
+                total: 0
+            },
+            {
+                nutrient_name: "Vitamin C, added",
+                nameForGraph: "V. C",
+                total: 0
+            },
+            {
+                nutrient_name: "Vitamin E, added)",
+                nameForGraph: "V. E",
+                total: 0
+            }
+            ]
+        this.setState({precents: precents_})
     }
 
+    componentDidUpdate(prevProps) {
+        if ((prevProps.ListFood != this.props.ListFood) || (prevProps.userId != this.props.userId)) {
+            this.refreshGraph();
+        }
+      }
+    
 
     async getRecommendedValues() {
-        await axios.get("http://localhost:3001/api/nutrients", {params: {user_id:this.props.userId}}).then((res)=>{
+        await axios.get("http://localhost:3001/api/nutrients", {params: {user_id:this.props.userId}})
+        .then((res)=>{
             this.setState({
                 recommendedValues: res.data
             });
-            //console.log(res.data[0].amount)
-            console.log("FROM VALUES", res.data)
+            // //console.log("Personal nutrients values:", res.data)
+            // try {}
+            // catch (e){}
         })
     };
     async getFoodEaten() {
-        await axios.get("http://localhost:3001/api/foodEaten", {params: {user_id:this.props.userId}}).then((res)=>{
+        await axios.get("http://localhost:3001/api/foodEaten", {params: {user_id:this.props.userId}})
+        .then((res)=>{
             this.setState({
                 foodEaten: res.data
             });
-            this.updateGraph()
-            //console.log(res.data[0].amount)
-            console.log("FROM FOOD EATEN", res.data)
+            //console.log("Total nutrients eaten:", res.data)
+            // try {this.updatePercents()}
+            // catch (e){}
         })
     };
-    async componentDidMount() {
-        //this.setState({data: graph})
+
+    updatePercents = () => {
+        var pre = {
+            nutrient_name: "",
+            total: 0
+        }
+        let precents_ = this.state.precents
+        for(let i = 0; i < this.state.foodEaten.length; i++){
+            let nutrient = this.state.foodEaten[i]
+            for(let j = 0; j < this.state.recommendedValues.length; j++){
+                let nut = this.state.recommendedValues[j]
+                if (nut.nutrient_id == nutrient.nutrient_id) {
+                    let recommended = nut.amount
+                    let p = Math.round((nutrient.total / nut.amount) * 100)
+                    for(let k = 0; k < this.state.precents.length; k++) {
+                        if (this.state.precents[k].nutrient_name == nutrient.nutrient_name){
+                            this.state.precents[k].total = p
+                        }
+                    }
+                    //recents_[nutrient.nutrient_name] = p
+                }
+            }
+            this.setState({precents: precents_})
+        }
     }
 
-    async componentWillReceiveProps(nextProps) {
-        console.log("PROPS HAS CHANGED")
-        this.getRecommendedValues(nextProps).then(()=>{
-            // this.setState({
-            //     recommendedValues: res.data
-            // });
-        })
-        this.getFoodEaten(nextProps).then(()=>{
-            // this.setState({
-            //     foodEaten: res.data
-            // });
-        })
+    refreshGraph = () => {
+        //console.log("PROPS HAS CHANGED")
+        this.getRecommendedValues(this.props.userId)
+            .then(() => this.getFoodEaten(this.props.userId))
+            .then(() => this.updatePercents())
 
     }
-//
+
     render() {
         return (
-            <ResponsiveContainer width="100%" height="100%">
-                <BarChart width={200} height={200} data={this.state.foodEaten}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="nutrient_name" tick={{fontSize: 15, fill:'white'}} />
-                    <YAxis tick={{fontSize:15, fill:'white'}}/>
-                    <Tooltip />
-                    <Legend verticalAlign="top" iconSize={14} />
-                    <Bar dataKey="total" onClick={this.updateGraph} name='Daily nutrient' legendType={"line"} label={{ fill: 'green', fontSize: 15 }} fill="#82ca9d" />
-                </BarChart>
-            </ResponsiveContainer>
-
-        ); // DONT DELETE: <ReferenceLine strokeWidth={3} y={100} alwaysShow={true} isFront={true} label={{value:'Your Goal For Today', fill: 'white', fontSize: 20 }}  stroke="red" strokeDasharray="3 3" />
+            <div>
+                Daily Graph
+                <br/>
+                <IconButton aria-label="delete" onClick={this.refreshGraph}> 
+                    <RefreshIcon />
+                </IconButton>
+                <div className='bar'>
+                    <ResponsiveContainer width="100%"  height={300}>
+                        <BarChart data={this.state.precents} >
+                            <XAxis dataKey="nameForGraph" minTickGap={1} tick={{fontSize: 14, fill:'green'}} />
+                            <YAxis tick={{fontSize:15, fill:'white'}}/>
+                            <Legend verticalAlign="top" iconSize={14} />
+                            <ReferenceLine strokeWidth={3} y={100} alwaysShow={true} isFront={true} label={{value:'Your Goal For Today', fill: 'white', fontSize: 20 }}  stroke="red" strokeDasharray="3 3" />
+                            <Tooltip content="nameForGraph"/>
+                            <Bar  dataKey="total" barSize={35} name='Daily %' legendType={"line"} label={{ fill: 'green', fontSize: 15 }} fill="#82ca9d" />
+                        </BarChart>
+                    </ResponsiveContainer>
+                    <ChangeValues func={this.refreshGraph} userId={this.props.userId} values={this.state.recommendedValues}/>
+                </div>
+            </div>
+        );
     }
 }
-
-
 export default Graph;

@@ -40,3 +40,6 @@
   text-decoration: underline;
   background-color: gainsboro;
 }
+table {
+  width: 100%;
+}
