@@ -199,7 +199,7 @@ app.get("/api/foodEaten", (req,res) => {
         "ON nurti.food_values.food_id=t.food_id) as f\n" +
         "ON nurti.nutrient.nutrient_id=f.nutrient_id\n" +
         "ORDER BY nurti.nutrient.nutrient_id ASC) AS r\n" +
-        "GROUP BY r.nutrient_name;"
+        "GROUP BY r.nutrient_id;"
     //const q1 = "SELECT * FROM nurti.food_eaten"
     db.query(query, function (err, result, fields) {
             //console.log("FROM FOOD EATEN", result)
