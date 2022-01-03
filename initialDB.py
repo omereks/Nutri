@@ -147,8 +147,8 @@ print("finish upload food_values")
 #food_eaten
 print("create food_eaten table")
 mycursor.execute("CREATE TABLE `nurti`.`food_eaten` (" \
-                    "`user_id` INT NULL," \
-                    "`food_id` VARCHAR(45) NULL," \
+                    "`user_id` INT NOT NULL," \
+                    "`food_id` VARCHAR(45) NOT NULL," \
                     "`amount` INT NULL," \
                     "PRIMARY KEY (`user_id`, `food_id`));")
 
@@ -158,11 +158,10 @@ print("finish upload food_eaten")
 #recommended_values
 print("create recommended_values table")
 mycursor.execute("CREATE TABLE `nurti`.`recommended_values` (" \
-                    "`ID` INT NOT NULL," \
-                    "`gender` TINYINT(1) NULL," \
-                    "`nutrient_id` INT NULL," \
+                    "`gender` TINYINT(1) NOT NULL," \
+                    "`nutrient_id` INT NOT NULL," \
                     "`amount` INT NULL," \
-                    "PRIMARY KEY (`ID`));")
+                    "PRIMARY KEY (`gender`, `nutrient_id`));")
 
 print("finish create recommended_values")
 #male = 1 , female 0
