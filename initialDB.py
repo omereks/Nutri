@@ -114,11 +114,10 @@ print("finish upload nutrient")
 #food_values
 print("create food_values table")
 mycursor.execute("CREATE TABLE `nurti`.`food_values` (" \
-                    "`ID` INT NOT NULL," \
-                    "`food_id` INT NULL," \
-                    "`nutrient_id` INT NULL," \
+                    "`food_id` INT NOT NULL," \
+                    "`nutrient_id` INT NOT NULL," \
                     "`amount` VARCHAR(45) NULL," \
-                    "PRIMARY KEY (`ID`));")
+                    "PRIMARY KEY (`food_id`, `nutrient_id`));")
 
 
 empdata = pd.read_csv('food_nutrient.csv', index_col=False, delimiter = ',')
